@@ -66,6 +66,23 @@ public class GeoCharts extends PApplet {
     private void renderLegend() {
         fill(255);
         rect((MAPWIDTH / 5) * 3, (MAPHEIGHT / 12) * 10, (float) (MAPWIDTH / 5.25), (float) ((MAPHEIGHT / 12) * 1.75));
+
+        double startX = (MAPWIDTH / 5) * 3.1;
+        double startY = (MAPHEIGHT / 12) * 10.3;
+        for (int i = 0; i < severity.length; i++) {
+            int color = severity[i];
+            fill(color);
+            rect((float) (startX + (i * 20)), (float) startY, 20, 5);
+        }
+
+        fill(0);
+        textSize(8);
+        text("0", (float) startX - 1, (float) startY + 15);
+        text("300", (float) startX + 90, (float) startY + 15);
+
+        textSize(10);
+        text("Earthquake duration", (float) startX, (float) startY + 35);
+        text("in seconds", (float) startX, (float) startY + 45);
     }
 
     private void drawSingleDataPoint(int x, int y, double richter, int duration) {
