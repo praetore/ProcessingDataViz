@@ -5,15 +5,23 @@ import processing.core.PImage;
  * Created by darryl on 1-5-15.
  */
 public class GeoCharts extends PApplet {
+    private static final int SCALE = 3;
+    private static final int maxXCoord = 26;
+    private static final int maxYCoord = 67;
+    private static final boolean displayGrid = false;
+    private final int[] severity = {
+            color(0, 255, 228),
+            color(53, 204, 8),
+            color(153, 145, 1),
+            color(204, 75, 8),
+            color(255, 23, 7)
+    };
     private PImage icelandMap;
     private String earthQuakeData[];
-    private static final int SCALE = 3;
     private int MAPWIDTH;
     private int MAPHEIGHT;
     private int gridXSize;
     private int gridYSize;
-    private int maxXCoord = 26;
-    private int maxYCoord = 67;
 
     @Override
     public void setup() {
@@ -32,27 +40,40 @@ public class GeoCharts extends PApplet {
     @Override
     public void draw() {
         renderMap();
-        renderGrid();
-        drawDataPoints(earthQuakeData);
+        if (displayGrid) {
+            renderGrid();
+        }
+        renderLegend();
+        drawDataPoints();
+
     }
 
     private void renderMap() {
         image(icelandMap, 0, 0, MAPWIDTH, MAPHEIGHT);
     }
 
-    private void drawDataPoints(String[] data) {
-        for (String s : data) {
+    private void drawDataPoints() {
+        for (String s : earthQuakeData) {
             String[] dataPoints = split(s, ";");
             int x = Integer.parseInt(dataPoints[5]);
             int y = Integer.parseInt(dataPoints[2]);
-            drawSingleDataPoint(x, y);
+            double richter = Double.parseDouble(dataPoints[8]);
+            int duration = (int) (Double.parseDouble(dataPoints[9]) / 61);
+            drawSingleDataPoint(x, y, richter, duration);
         }
     }
 
-    private void drawSingleDataPoint(int x, int y) {
+    private void renderLegend() {
+        fill(255);
+        rect((MAPWIDTH / 5) * 3, (MAPHEIGHT / 12) * 10, (float) (MAPWIDTH / 5.25), (float) ((MAPHEIGHT / 12) * 1.75));
+    }
+
+    private void drawSingleDataPoint(int x, int y, double richter, int duration) {
+        fill(severity[duration]);
+        richter = richter * 4;
         int xPos = (maxXCoord - x) * gridXSize;
         int yPos = (maxYCoord - y) * gridYSize;
-        ellipse(xPos, yPos, 10, 10);
+        ellipse(xPos, yPos, (float) richter, (float) richter);
     }
 
     private void renderGrid() {
