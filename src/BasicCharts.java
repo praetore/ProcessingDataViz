@@ -7,7 +7,7 @@ import java.util.Random;
 /**
  * Created by darryl on 1-5-15.
  */
-public class MySketch extends PApplet {
+public class BasicCharts extends PApplet {
     private Map<String, Integer> barChartData = new HashMap<>();
 
     private Map<String, Float> pieChartData = new HashMap<>();
